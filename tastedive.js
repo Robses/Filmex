@@ -19,3 +19,42 @@ xhr.onreadystatechange = function(){
 };
 xhr.open(method, url);
 xhr.send();
+
+Vue.component('tastedive', {
+	data() {
+		return {
+			similar: {
+				info: [
+					{
+						name: "Matrix",
+						type: "music"
+					}
+				],
+				results: [
+					{
+						name: "Kaiser Chiefs",
+						type: "music"
+					},
+					{
+						name: "Catch Me If You Can",
+						type: "movie"
+					},
+					{
+						name: "Fight Club",
+						type: "movie"
+					}
+				]
+			}			
+		}
+	},
+	template: `
+	<div>
+		<ul>
+			<li v-for="info in similar.info">{{ info.name }}  [{{ info.type }}]</li>
+		</ul>
+		<ol>
+			<li v-for="result in similar.results">{{ result.name }}  [{{ result.type }}]</li>
+		</ol>
+	</div>
+	`
+})
