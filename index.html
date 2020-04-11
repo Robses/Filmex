@@ -3,6 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
 </head>
 <body>
     <p>OK!</p>
@@ -19,12 +20,10 @@
     var app = new Vue({
       el: '#app',
       data: {
-        courses: []
+
       },
       computed: {
-          coursesCounter: function(){
-              return this.courses.length
-          }
+
       }
     });
 </script>
