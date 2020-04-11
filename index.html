@@ -8,24 +8,22 @@
 <body>
     <p>OK!</p>
     <div id = "app">
-        <!-- <tastedive></tastedive> -->
-        <omdb></omdb>
+        <tastedive></tastedive>
+        <!-- <omdb></omdb> -->
     </div>
 </body>
 
-<!-- <script src="tastedive.js"></script> -->
-<script src="omdbapi.js"></script>
+<script src="tastedive.js"></script>
+<!-- <script src="omdbapi.js"></script> -->
 
 <script>
     var app = new Vue({
       el: '#app',
       data: {
-        courses: []
+
       },
       computed: {
-          coursesCounter: function(){
-              return this.courses.length
-          }
+
       }
     });
 </script>
