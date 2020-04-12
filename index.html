@@ -6,26 +6,107 @@
     <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
 </head>
 <body>
-    <p>OK!</p>
-    <div id = "app">
-        <tastedive></tastedive>
-        <!-- <omdb></omdb> -->
+<p>OK!</p>
+<div id="app">
+    <div class="search-wrapper">
+        <input type="text" v-model="search" placeholder="Wyszukaj film"/>
+        <label>Podaj tytuł:</label>
+        <a>Szukana fraza: {{this.search}}</a>
+        <button onclick="searchSimilar()">Szukaj</button>
     </div>
+    <div>
+        <div class="card" v-for="movie in results">
+            <!--            <a v-bind:href="post.link" target="_blank">-->
+            <!--                <img v-bind:src="post.img"/>-->
+            <small>Tytuł : {{ movie.title }}</small>
+            <!--            </a>-->
+        </div>
+    </div>
+    <!--    <tastedive></tastedive>-->
+    <!--     <omdb></omdb>-->
+</div>
 </body>
 
 <script src="tastedive.js"></script>
+<script src="Movie.js"></script>
 <!-- <script src="omdbapi.js"></script> -->
 
 <script>
     var app = new Vue({
-      el: '#app',
-      data: {
-
-      },
-      computed: {
-
-      }
+        el: '#app',
+        data: {
+            search: '',
+            // results: [new Movie("The Matrix")]
+            results: []
+        },
+        computed: {
+            // similarMoviesList() {
+            //     let cors_anywhere_api = 'https://cors-anywhere.herokuapp.com/'
+            //     let tastediveURL = 'https://tastedive.com/api/similar?k=360743-apiclass-HZ7RM425&q=' + this.search.toLowerCase()
+            //     let url = cors_anywhere_api + tastediveURL
+            //
+            //     axios.get(url).then(response => {
+            //         similiar = response.data.Similar
+            //         console.log('Response for: ' + this.search.toLowerCase())
+            //         console.log('Total results: ' + similiar.Results.length)
+            //
+            //         similiarMovies = similiar.Results.filter(movie => movie.Type === "movie")
+            //
+            //         console.log('Total movie results: ' + similiarMovies.length)
+            //
+            //         this.results = []
+            //
+            //         similiarMovies.forEach(movie => {
+            //             let item = new Movie(movie.Name);
+            //             this.results.push(item)
+            //             console.log(this.results)
+            //         })
+            //         // this.results = similiarMovies
+            //         console.log(this.results)
+            //         return this.results
+            //     }).catch(e => {
+            //         console.error(e)
+            //         this.errors.push(e)
+            //     })
+            //
+            //     console.log(this.search)
+            //
+            //     return this.results
+            //     // return singleMovie.title.toLowerCase().includes(this.search.toLowerCase())
+            //     // return this.search.toLowerCase()
+            // }
+        },
     });
+
+    function searchSimilar() {
+        let cors_anywhere_api = 'https://cors-anywhere.herokuapp.com/'
+        let tastediveURL = 'https://tastedive.com/api/similar?k=360743-apiclass-HZ7RM425&q=' + app.search.toLowerCase()
+        let url = cors_anywhere_api + tastediveURL
+
+        axios.get(url).then(response => {
+            similiar = response.data.Similar
+            console.log('Response for: ' + app.search.toLowerCase())
+            console.log('Total results: ' + similiar.Results.length)
+
+            similiarMovies = similiar.Results.filter(movie => movie.Type === "movie")
+
+            console.log('Total movie results: ' + similiarMovies.length)
+
+            app.results = []
+
+            similiarMovies.forEach(movie => {
+                let item = new Movie(movie.Name);
+                app.results.push(item)
+                console.log(app.results)
+            })
+            // this.results = similiarMovies
+            console.log(app.results)
+            // return this.results
+        }).catch(e => {
+            console.error(e)
+            this.errors.push(e)
+        })
+    }
 </script>
 
 </html>
