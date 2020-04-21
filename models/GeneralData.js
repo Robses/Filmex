@@ -2,7 +2,7 @@ class GeneralData {
     constructor(title, year, rated, released, runtime, 
                 genre, director, writer, actors, plot, 
                 language, country, awards, poster, ratings, 
-                metascore, imdbRating, imdbID, type, DBD, 
+                metascore, imdbRating, imdbID, type, DVD, 
                 boxOffice, production, website, response) 
     {
         this.title = title;
@@ -24,7 +24,7 @@ class GeneralData {
         this.imdbRating = imdbRating;
         this.imdbID = imdbID;
         this.type = type;
-        this.DBD = DBD;
+        this.DVD = DVD;
         this.boxOffice = boxOffice;
         this.production = production;
         this.website = website;
