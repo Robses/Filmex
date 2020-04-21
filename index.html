@@ -22,12 +22,12 @@
             <tr>
                 <th>Podobne filmy</th>
             </tr>
-            <tr v-for="movie in similarMovies">
-                <td>{{movie.title}}</td>
+            <tr v-for="movie in movies">
+                <td>{{movie}}</td>
             </tr>
         </table>
         <table>
-
+            <h1>Title: {{ this.generalData }}</h1>
         </table>
     </div>
         <!--    <tastedive></tastedive>-->
@@ -36,7 +36,8 @@
 </body>
 
 <script src="tastedive.js"></script>
-<script src="Movie.js"></script>
+<script src="models/Similar.js"></script>
+<script src="models/GeneralData.js"></script>
 <script src="omdbapi.js"></script>
 
 <script>
@@ -44,7 +45,8 @@
         el: '#app',
         data: {
             searchText: "",
-            similarMovies: [],
+            movies: [],
+            generalData: "",
             errors: []
         },
         computed: {
@@ -65,13 +67,14 @@
                     console.log('Response for: ' + this.searchText.toLowerCase())
                     console.log('Total results: ' + similiar.Results.length)
                 
-                    movies = similiar.Results.filter(movie => movie.Type === "movie")
+                    filteredResult = similiar.Results.filter(movie => movie.Type === "movie")
                 
-                    console.log('Total movie results: ' + movies.length)
+                    console.log('Total movie results: ' + filteredResult.length)
                 
-                    movies.forEach(movie => {
-                        let item = new Movie(movie.Name);
-                        this.similarMovies.push(item)
+                    filteredResult.forEach(movie => {
+                        let item = new Similar(movie.Name, movie.Type);
+                        console.log(item)
+                        this.movies.push(item)
                     })
 
                 }).catch(e => {
@@ -79,8 +82,42 @@
                     this.errors.push(e)
                 })
             },
-            loadMovieInfo: () => {
-                console.log('loadMovieInfo')
+
+            loadMovieInfo: function() {
+                let omdbapiURL = `http://www.omdbapi.com/?t=${this.searchText}&apikey=d3b3f9ef`
+
+                axios.get(omdbapiURL).then(response => {
+                    this.generalData = new GeneralData(
+                        response.data.Title,
+                        response.data.Year,
+                        response.data.Rated,
+                        response.data.Released,
+                        response.data.Runtime,
+                        response.data.Genre,
+                        response.data.Director,
+                        response.data.Writer,
+                        response.data.Actors,
+                        response.data.Plot,
+                        response.data.Language,
+                        response.data.Country,
+                        response.data.Awards,
+                        response.data.Poster,
+                        response.data.Ratings,
+                        response.data.Metascore,
+                        response.data.imdbRating,
+                        response.data.imdbID,
+                        response.data.Type,
+                        response.data.DBD,
+                        response.data.BoxOffice,
+                        response.data.Production,
+                        response.data.Website,
+                        response.data.Response
+                    )
+                    console.log(this.generalData)
+                }).catch(e => {
+                    console.error(e)
+                    this.errors.push(e)
+                })
             }
         }
     });
