@@ -22,7 +22,7 @@
         <div class="search-wrapper">
             <label>Podaj tytuł filmu:</label><br>
             <input id="searchArea" type="text" v-model="search" placeholder="Wyszukaj film..." />
-            <button id="searchButton" onclick="searchSimilar()">Szukaj</button><br>
+            <button id="searchButton" @click="searchSimilar()">Szukaj</button><br>
             <a>Szukana fraza: {{this.search}}</a><br>
         </div>
         <div>
@@ -85,7 +85,8 @@
         data: {
             search: '',
             // results: [new Movie("The Matrix")]
-            results: []
+            results: [],
+            errors: []
         },
         computed: {
             // similarMoviesList() {
@@ -124,37 +125,40 @@
             //     // return this.search.toLowerCase()
             // }
         },
+        methods: {
+            searchSimilar: function() {
+                let cors_anywhere_api = 'https://cors-anywhere.herokuapp.com/'
+                let tastediveURL = 'https://tastedive.com/api/similar?k=360743-apiclass-HZ7RM425&q=' + this.search.toLowerCase()
+                let url = cors_anywhere_api + tastediveURL
+                console.log(url)
+
+                axios.get(url).then(response => {
+                    similiar = response.data.Similar
+                    console.log('Response for: ' + app.search.toLowerCase())
+                    console.log('Total results: ' + similiar.Results.length)
+                
+                    similiarMovies = similiar.Results.filter(movie => movie.Type === "movie")
+                
+                    console.log('Total movie results: ' + similiarMovies.length)
+                
+                    app.results = []
+                
+                    similiarMovies.forEach(movie => {
+                        let item = new Movie(movie.Name);
+                        app.results.push(item)
+                        console.log(app.results)
+                    })
+                    // this.results = similiarMovies
+                    console.log(app.results)
+                    // return this.results
+                }).catch(e => {
+                    console.error(e)
+                    this.errors.push(e)
+                })
+            }
+        }
     });
 
-    function searchSimilar() {
-        let cors_anywhere_api = 'https://cors-anywhere.herokuapp.com/'
-        let tastediveURL = 'https://tastedive.com/api/similar?k=360743-apiclass-HZ7RM425&q=' + app.search.toLowerCase()
-        let url = cors_anywhere_api + tastediveURL
-
-        axios.get(url).then(response => {
-            similiar = response.data.Similar
-            console.log('Response for: ' + app.search.toLowerCase())
-            console.log('Total results: ' + similiar.Results.length)
-
-            similiarMovies = similiar.Results.filter(movie => movie.Type === "movie")
-
-            console.log('Total movie results: ' + similiarMovies.length)
-
-            app.results = []
-
-            similiarMovies.forEach(movie => {
-                let item = new Movie(movie.Name);
-                app.results.push(item)
-                console.log(app.results)
-            })
-            // this.results = similiarMovies
-            console.log(app.results)
-            // return this.results
-        }).catch(e => {
-            console.error(e)
-            this.errors.push(e)
-        })
-    }
 </script>
 
 </html>
