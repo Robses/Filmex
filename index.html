@@ -1,36 +1,84 @@
 <!DOCTYPE html>
 <html>
+
 <head>
     <meta charset="UTF-8">
     <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
     <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js">
+    </script>
+    <style>
+        .header {
+            display: flex;
+            justify-content: center;
+
+        }
+    </style>
 </head>
+
 <body>
-<p>OK!</p>
-<div id="app">
-    <div class="search-wrapper">
-        <input type="text" v-model="search" placeholder="Wyszukaj film"/>
-        <label>Podaj tytuł:</label>
-        <a>Szukana fraza: {{this.search}}</a>
-        <button onclick="searchSimilar()">Szukaj</button>
-    </div>
-    <div>
-        <div class="card" v-for="movie in results">
-            <!--            <a v-bind:href="post.link" target="_blank">-->
-            <!--                <img v-bind:src="post.img"/>-->
-            <small>Tytuł : {{ movie.title }}</small>
-            <!--            </a>-->
+    <h1 class="header">Filmex</h1>
+    <div id="app" class="header">
+        <div class="search-wrapper">
+            <label>Podaj tytuł filmu:</label><br>
+            <input id="searchArea" type="text" v-model="search" placeholder="Wyszukaj film..." />
+            <button id="searchButton" onclick="searchSimilar()">Szukaj</button><br>
+            <a>Szukana fraza: {{this.search}}</a><br>
         </div>
+        <div>
+            <div class="card" v-for="movie in results">
+                <!--            <a v-bind:href="post.link" target="_blank">-->
+                <!--                <img v-bind:src="post.img"/>-->
+                <small>Tytuł : {{ movie.title }}</small>
+                <!--            </a>-->
+            </div>
+        </div>
+        <!--    <tastedive></tastedive>-->
+        <!--     <omdb></omdb>-->
     </div>
-    <!--    <tastedive></tastedive>-->
-    <!--     <omdb></omdb>-->
-</div>
 </body>
 
 <script src="tastedive.js"></script>
 <script src="Movie.js"></script>
-<!-- <script src="omdbapi.js"></script> -->
+<script src="omdbapi.js"></script>
+<!-- <script>
 
+    $("#searchArea").keypress(function (event) {
+        if (event.keyCode === 13) {
+            $("#searchButton").click();
+        }
+    });
+
+    $("#searchButton").click(function () {
+        let cors_anywhere_api = 'https://cors-anywhere.herokuapp.com/'
+        let tastediveURL = 'https://tastedive.com/api/similar?k=360743-apiclass-HZ7RM425&q=' + app.search.toLowerCase()
+        let url = cors_anywhere_api + tastediveURL
+
+        axios.get(url).then(response => {
+            similiar = response.data.Similar
+            console.log('Response for: ' + app.search.toLowerCase())
+            console.log('Total results: ' + similiar.Results.length)
+
+            similiarMovies = similiar.Results.filter(movie => movie.Type === "movie")
+
+            console.log('Total movie results: ' + similiarMovies.length)
+
+            app.results = []
+
+            similiarMovies.forEach(movie => {
+                let item = new Movie(movie.Name);
+                app.results.push(item)
+                console.log(app.results)
+            })
+            // this.results = similiarMovies
+            console.log(app.results)
+            // return this.results
+        }).catch(e => {
+            console.error(e)
+            this.errors.push(e)
+        })
+    }); 
+</script> -->
 <script>
     var app = new Vue({
         el: '#app',
