@@ -9,16 +9,22 @@
     <link rel="stylesheet" type="text/css" href="main.css">
 </head>
 
-<body>
-<div id="app">
+<body class="body">
+<div id="app" class="body">
 
-    <h1 class="center">Filmex</h1>
+    
     <div class="center">
-        <label>Podaj tytuł filmu:</label><br>
-        <input id="searchArea" type="text" v-model="searchText" placeholder="Wyszukaj film..."/>
-        <button id="searchButton" @click="search()">Szukaj</button>
+        <h1>Filmex</h1>
+        <label>Podaj tytuł filmu:</label>
         <br>
-        <a>Szukana fraza: {{this.searchText}}</a><br>
+        <br>
+        <input id="searchArea" class="searchArea" type="text" v-model="searchText" placeholder="Wyszukaj film..."/>
+        <br>
+        <button id="searchButton" class="searchButton" @click="search()">Szukaj</button>
+        <br>
+        <br>
+        <a>Szukana fraza:</a><br>
+        <a>{{this.searchText}}</a><br>
     </div>
 
 
@@ -27,14 +33,17 @@
         <!--        <button class="accordion">{{item.name}}</button>-->
         <button class="accordion">{{movieDetails.title}}</button>
         <div class="panel inner-panel">
-            <img v-bind:src="movieDetails.poster">
+            <div class="center">
+                <img  v-bind:src="movieDetails.poster">
+            </div>
             <p>{{movieDetails}}</p>
         </div>
     </div>
+    <div class= "show-more-btn-area">
     <button v-if="!isFullListDisplayed" class="show-mote-btn"
             onclick="function fun1(){app.loadMoreMoviesInDetail(SHOW_MORE_ITEMS_NUM)}; fun1()">Pokaż więcej
     </button>
-</div>
+    </div>
 </div>
 </body>
 
