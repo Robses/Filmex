@@ -10,29 +10,32 @@
 </head>
 
 <body>
-    <div id="app">
-        <h1 class="center">Filmex</h1>
-        <div class="center">
-            <label>Podaj tytuł filmu:</label><br>
-            <input id="searchArea" type="text" v-model="searchText" placeholder="Wyszukaj film..." />
-            <button id="searchButton" @click="search()">Szukaj</button><br>
-            <a>Szukana fraza: {{this.searchText}}</a><br>
+<div id="app">
+
+    <h1 class="center">Filmex</h1>
+    <div class="center">
+        <label>Podaj tytuł filmu:</label><br>
+        <input id="searchArea" type="text" v-model="searchText" placeholder="Wyszukaj film..."/>
+        <button id="searchButton" @click="search()">Szukaj</button>
+        <br>
+        <a>Szukana fraza: {{this.searchText}}</a><br>
+    </div>
+
+
+    <!--    <div v-for="(item) in movies" onclick="switchInnerPanelVisibility(this)">-->
+    <div v-for="(movieDetails) in moviesInDetail" onclick="switchInnerPanelVisibility(this)">
+        <!--        <button class="accordion">{{item.name}}</button>-->
+        <button class="accordion">{{movieDetails.title}}</button>
+        <div class="panel inner-panel">
+            <img v-bind:src="movieDetails.poster">
+            <p>{{movieDetails}}</p>
         </div>
-        <table class="center">
-            <tr>
-                <th>Podobne filmy</th>
-            </tr>
-            <tr v-for="movie in movies">
-                <td>{{movie}}</td>
-            </tr>
-        </table>
-        <table>
-            <h1>Title: {{ this.generalData }}</h1>
-        </table>
     </div>
-        <!--    <tastedive></tastedive>-->
-        <!--     <omdb></omdb>-->
-    </div>
+    <button v-if="!isFullListDisplayed" class="show-mote-btn"
+            onclick="function fun1(){app.loadMoreMoviesInDetail(SHOW_MORE_ITEMS_NUM)}; fun1()">Pokaż więcej
+    </button>
+</div>
+</div>
 </body>
 
 <script src="tastedive.js"></script>
@@ -40,41 +43,43 @@
 <script src="models/GeneralData.js"></script>
 <script src="omdbapi.js"></script>
 
+
 <script>
+    var SHOW_FIRST_ITEMS_NUM = 3;
+    var SHOW_MORE_ITEMS_NUM = 3;
+
     var app = new Vue({
         el: '#app',
         data: {
             searchText: "",
-            movies: [],
             generalData: "",
-            errors: []
+            errors: [],
+            movies: [],
+            similarMovies: [], //lista wszystkich podobnych filmów
+            moviesInDetail: [], //lista wszystkich podobnych filmów
+            isFullListDisplayed: true
         },
-        computed: {
-
-        },
+        computed: {},
         methods: {
-            search: function() {
-                this.searchSimilarMovies();
-                this.loadMovieInfo();
+            search: async function () {
+                await this.searchSimilarMovies();
+                await this.loadMoreMoviesInDetail(SHOW_FIRST_ITEMS_NUM);
+                // this.loadMovieInfo();
             },
-            searchSimilarMovies: function() {
+
+            searchSimilarMovies: async function () {
                 let cors_anywhere_api = 'https://cors-anywhere.herokuapp.com/'
                 let tastediveURL = 'https://tastedive.com/api/similar?k=360743-apiclass-HZ7RM425&q=' + this.searchText.toLowerCase()
                 let url = cors_anywhere_api + tastediveURL
 
-                axios.get(url).then(response => {
+                await axios.get(url).then(response => {
                     similiar = response.data.Similar
-                    console.log('Response for: ' + this.searchText.toLowerCase())
-                    console.log('Total results: ' + similiar.Results.length)
-                
+
                     filteredResult = similiar.Results.filter(movie => movie.Type === "movie")
-                
-                    console.log('Total movie results: ' + filteredResult.length)
-                
+
                     filteredResult.forEach(movie => {
                         let item = new Similar(movie.Name, movie.Type);
-                        console.log(item)
-                        this.movies.push(item)
+                        this.similarMovies.push(item)
                     })
 
                 }).catch(e => {
@@ -83,7 +88,63 @@
                 })
             },
 
-            loadMovieInfo: function() {
+            loadMoreMoviesInDetail: async function (nextMoviesCount) {
+                let similarMoviesLength = this.similarMovies.length
+
+                if (similarMoviesLength > this.moviesInDetail.length) {
+                    let nextMovieDetailsToLoad = Math.min(nextMoviesCount, similarMoviesLength - this.moviesInDetail.length)
+
+                    for (const movieName of this.similarMovies
+                        .slice(this.moviesInDetail.length, this.moviesInDetail.length + nextMovieDetailsToLoad)
+                        .map(similarInfo => similarInfo.name)) {
+                        let movieInDetail = await this.getDetailsOf(movieName);
+                        this.moviesInDetail.push(movieInDetail)
+                    }
+                }
+
+                this.isFullListDisplayed = similarMoviesLength === this.moviesInDetail.length
+
+            },
+
+            getDetailsOf: async function (movieName) {
+                let omdbapiURL = `http://www.omdbapi.com/?t=${movieName}&apikey=d3b3f9ef`
+
+                return axios.get(omdbapiURL).then(response => {
+                    this.generalData = new GeneralData(
+                        response.data.Title,
+                        response.data.Year,
+                        response.data.Rated,
+                        response.data.Released,
+                        response.data.Runtime,
+                        response.data.Genre,
+                        response.data.Director,
+                        response.data.Writer,
+                        response.data.Actors,
+                        response.data.Plot,
+                        response.data.Language,
+                        response.data.Country,
+                        response.data.Awards,
+                        response.data.Poster,
+                        response.data.Ratings,
+                        response.data.Metascore,
+                        response.data.imdbRating,
+                        response.data.imdbID,
+                        response.data.Type,
+                        response.data.DBD,
+                        response.data.BoxOffice,
+                        response.data.Production,
+                        response.data.Website,
+                        response.data.Response
+                    )
+
+                    return this.generalData
+                }).catch(e => {
+                    console.error(e)
+                    this.errors.push(e)
+                })
+            },
+
+            loadMovieInfo: function () {
                 let omdbapiURL = `http://www.omdbapi.com/?t=${this.searchText}&apikey=d3b3f9ef`
 
                 axios.get(omdbapiURL).then(response => {
@@ -122,6 +183,15 @@
         }
     });
 
-</script>
+    function switchInnerPanelVisibility(panelDiv) {
 
+        let innerPanel = panelDiv.getElementsByClassName("inner-panel")[0]
+        if (innerPanel.style.display === "block") {
+            innerPanel.style.display = "none";
+        } else {
+            innerPanel.style.display = "block";
+        }
+    }
+
+</script>
 </html>
