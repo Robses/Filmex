@@ -29,8 +29,7 @@
         <button id="searchButton" class="searchButton" @click="search()">Search</button>
         <br>
         <br>
-        <a>You are searching for similar films to:</a><br>
-        <a>{{this.searchText}}</a><br>
+        <p>You are searching for similar films to:<br>{{this.searchText}}</p>
     </div>
 
     <div v-if="dataIsLoading">
