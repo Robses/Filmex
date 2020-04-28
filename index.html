@@ -50,8 +50,24 @@
             <div class="panel inner-panel">
                 <div class="center">
                     <img  v-bind:src="movieDetails.poster">
+                    <h2>{{movieDetails.title}}</h1>
+                    <h2>{{movieDetails.year}}</h2>
                 </div>
-                <p>{{movieDetails}}</p>
+                <div class="movieInformation">
+                    <br><b>Premiera:</b> {{movieDetails.released}}
+                    <br><b>Długość: </b>{{movieDetails.runtime}}
+                    <br><b>Gatunek: </b>{{movieDetails.genre}}
+                    <br><b>Reżyseria: </b>{{movieDetails.director}}
+                    <br><b>Scenariusz: </b>{{movieDetails.writer}}
+                    <br><b>Obsada: </b>{{movieDetails.actors}}
+                    <br><b>Fabuła: </b>{{movieDetails.plot}}
+                    <br><b>Język: </b>{{movieDetails.language}}
+                    <br><b>Produkcja: </b>{{movieDetails.country}}
+                    <br><b>Nagrody: </b>{{movieDetails.awards}}
+                    <br><b>Ocena filmu z IMBD: </b>{{movieDetails.imdbRating}}
+                    <br><b>BoxOffice: </b>{{movieDetails.boxOffice}}
+                    <br><b>Wydawca: </b>{{movieDetails.production}}
+                </div>
             </div>
         </div>
         <div class= "show-more-btn-area">
