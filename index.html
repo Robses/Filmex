@@ -72,19 +72,22 @@
             searchText: "",
             generalData: "",
             errors: [],
-            movies: [],
             similarMovies: [], //lista wszystkich podobnych filmów
-            moviesInDetail: [], //lista wszystkich podobnych filmów
+            moviesInDetail: [], //lista z danymi wszystkich podobnych filmów
             isFullListDisplayed: true,
             dataIsLoading: false
         },
         computed: {},
         methods: {
             search: async function () {
-                this.dataIsLoading = true
-                await this.searchSimilarMovies();
-                await this.loadMoreMoviesInDetail(this.SHOW_FIRST_ITEMS_NUM);
-                this.dataIsLoading = false
+                if(this.searchText) {
+                    this.dataIsLoading = true
+                    this.similarMovies = []
+                    this.moviesInDetail = []
+                    await this.searchSimilarMovies();
+                    await this.loadMoreMoviesInDetail(this.SHOW_FIRST_ITEMS_NUM);
+                    this.dataIsLoading = false
+                }
             },
 
             searchSimilarMovies: async function () {
