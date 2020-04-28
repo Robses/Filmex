@@ -6,13 +6,19 @@
     <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
     <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+
+    <script src="models/Similar.js"></script>
+    <script src="models/GeneralData.js"></script>
+    <script src="tastedive.js"></script>
+    <script src="omdbapi.js"></script>
+
+    <link rel="stylesheet" type="text/css" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
     <link rel="stylesheet" type="text/css" href="main.css">
+    <link rel="stylesheet" type="text/css" href="progressbar.css">
 </head>
 
 <body class="body">
 <div id="app" class="body">
-
-    
     <div class="center">
         <h1>Filmex</h1>
         <label>Podaj tytuł filmu:</label>
@@ -27,53 +33,58 @@
         <a>{{this.searchText}}</a><br>
     </div>
 
-
-    <!--    <div v-for="(item) in movies" onclick="switchInnerPanelVisibility(this)">-->
-    <div v-for="(movieDetails) in moviesInDetail" onclick="switchInnerPanelVisibility(this)">
-        <!--        <button class="accordion">{{item.name}}</button>-->
-        <button class="accordion">{{movieDetails.title}}</button>
-        <div class="panel inner-panel">
-            <div class="center">
-                <img  v-bind:src="movieDetails.poster">
+    <div v-if="dataIsLoading">
+        <div class="progress">
+            <div class="progress-bar progress-bar-striped active" role="progressbar" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100" style="width: 100%">
+                <span>Ładuję, proszę czekać
+                    <span class="dotdotdot"></span>
+                </span>
             </div>
-            <p>{{movieDetails}}</p>
         </div>
     </div>
-    <div class= "show-more-btn-area">
-    <button v-if="!isFullListDisplayed" class="show-mote-btn"
-            onclick="function fun1(){app.loadMoreMoviesInDetail(SHOW_MORE_ITEMS_NUM)}; fun1()">Pokaż więcej
-    </button>
+    <div v-else> 
+        <!--    <div v-for="(item) in movies" onclick="switchInnerPanelVisibility(this)">-->
+        <div v-for="movieDetails in moviesInDetail" onclick="switchInnerPanelVisibility(this)">
+            <!--        <button class="accordion">{{item.name}}</button>-->
+            <button class="accordion">{{movieDetails.title}}</button>
+            <div class="panel inner-panel">
+                <div class="center">
+                    <img  v-bind:src="movieDetails.poster">
+                </div>
+                <p>{{movieDetails}}</p>
+            </div>
+        </div>
+        <div class= "show-more-btn-area">
+        <button v-if="!isFullListDisplayed" class="show-mote-btn"
+                @click="loadMoreMoviesInDetail(SHOW_MORE_ITEMS_NUM)">Pokaż więcej
+        </button>
+        </div>
     </div>
 </div>
 </body>
 
-<script src="tastedive.js"></script>
-<script src="models/Similar.js"></script>
-<script src="models/GeneralData.js"></script>
-<script src="omdbapi.js"></script>
-
-
 <script>
-    var SHOW_FIRST_ITEMS_NUM = 3;
-    var SHOW_MORE_ITEMS_NUM = 3;
-
     var app = new Vue({
         el: '#app',
         data: {
+            SHOW_FIRST_ITEMS_NUM: 3,
+            SHOW_MORE_ITEMS_NUM: 3,
             searchText: "",
             generalData: "",
             errors: [],
             movies: [],
             similarMovies: [], //lista wszystkich podobnych filmów
             moviesInDetail: [], //lista wszystkich podobnych filmów
-            isFullListDisplayed: true
+            isFullListDisplayed: true,
+            dataIsLoading: false
         },
         computed: {},
         methods: {
             search: async function () {
+                this.dataIsLoading = true
                 await this.searchSimilarMovies();
-                await this.loadMoreMoviesInDetail(SHOW_FIRST_ITEMS_NUM);
-                // this.loadMovieInfo();
+                await this.loadMoreMoviesInDetail(this.SHOW_FIRST_ITEMS_NUM);
+                this.dataIsLoading = false
             },
 
             searchSimilarMovies: async function () {
