@@ -21,22 +21,22 @@
 <div id="app" class="body">
     <div class="center">
         <h1>Filmex</h1>
-        <label>Podaj tytuł filmu:</label>
+        <label>Give the name of the film to search for similar ones:</label>
         <br>
         <br>
-        <input id="searchArea" class="searchArea" type="text" v-model="searchText" placeholder="Wyszukaj film..."/>
+        <input id="searchArea" class="searchArea" type="text" v-model="searchText" placeholder="Search for similar movies to..."/>
         <br>
-        <button id="searchButton" class="searchButton" @click="search()">Szukaj</button>
+        <button id="searchButton" class="searchButton" @click="search()">Search</button>
         <br>
         <br>
-        <a>Szukana fraza:</a><br>
+        <a>You are searching for similar films to:</a><br>
         <a>{{this.searchText}}</a><br>
     </div>
 
     <div v-if="dataIsLoading">
         <div class="progress">
             <div class="progress-bar progress-bar-striped active" role="progressbar" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100" style="width: 100%">
-                <span>Ładuję, proszę czekać
+                <span>Loading, please wait
                     <span class="dotdotdot"></span>
                 </span>
             </div>
@@ -54,25 +54,25 @@
                     <h2>{{movieDetails.year}}</h2>
                 </div>
                 <div class="movieInformation">
-                    <br><b>Premiera:</b> {{movieDetails.released}}
-                    <br><b>Długość: </b>{{movieDetails.runtime}}
-                    <br><b>Gatunek: </b>{{movieDetails.genre}}
-                    <br><b>Reżyseria: </b>{{movieDetails.director}}
-                    <br><b>Scenariusz: </b>{{movieDetails.writer}}
-                    <br><b>Obsada: </b>{{movieDetails.actors}}
-                    <br><b>Fabuła: </b>{{movieDetails.plot}}
-                    <br><b>Język: </b>{{movieDetails.language}}
-                    <br><b>Produkcja: </b>{{movieDetails.country}}
-                    <br><b>Nagrody: </b>{{movieDetails.awards}}
-                    <br><b>Ocena filmu z IMBD: </b>{{movieDetails.imdbRating}}
+                    <br><b>Release date:</b> {{movieDetails.released}}
+                    <br><b>Duration: </b>{{movieDetails.runtime}}
+                    <br><b>Genre: </b>{{movieDetails.genre}}
+                    <br><b>Director: </b>{{movieDetails.director}}
+                    <br><b>Writer/Scenarist: </b>{{movieDetails.writer}}
+                    <br><b>Cast: </b>{{movieDetails.actors}}
+                    <br><b>Plot: </b>{{movieDetails.plot}}
+                    <br><b>Language: </b>{{movieDetails.language}}
+                    <br><b>Country: </b>{{movieDetails.country}}
+                    <br><b>Awards: </b>{{movieDetails.awards}}
+                    <br><b>IMBD rating: </b>{{movieDetails.imdbRating}}
                     <br><b>BoxOffice: </b>{{movieDetails.boxOffice}}
-                    <br><b>Wydawca: </b>{{movieDetails.production}}
+                    <br><b>Production: </b>{{movieDetails.production}}
                 </div>
             </div>
         </div>
         <div class= "show-more-btn-area">
         <button v-if="!isFullListDisplayed" class="show-mote-btn"
-                @click="loadMoreMoviesInDetail(SHOW_MORE_ITEMS_NUM)">Pokaż więcej
+                @click="loadMoreMoviesInDetail(SHOW_MORE_ITEMS_NUM)">Show more
         </button>
         </div>
     </div>
