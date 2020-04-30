@@ -49,12 +49,12 @@
                 <!--        <button class="accordion">{{item.name}}</button>-->
                 <button class="accordion">{{movieDetails.title}}</button>
                 <div class="panel inner-panel">
-                    <div class="center">
+                    <div class="moviePoster">
                         <img v-bind:src="movieDetails.poster">
-                        <h2>{{movieDetails.title}}</h1>
-                            <h2>{{movieDetails.year}}</h2>
                     </div>
                     <div class="movieInformation">
+                        <h1>{{movieDetails.title}}</h1>
+                        <h2>{{movieDetails.year}}</h2>
                         <br><b>Release date:</b> {{movieDetails.released}}
                         <br><b>Duration: </b>{{movieDetails.runtime}}
                         <br><b>Genre: </b>{{movieDetails.genre}}
@@ -65,9 +65,15 @@
                         <br><b>Language: </b>{{movieDetails.language}}
                         <br><b>Country: </b>{{movieDetails.country}}
                         <br><b>Awards: </b>{{movieDetails.awards}}
-                        <br><b>IMBD rating: </b>{{movieDetails.imdbRating}}
                         <br><b>BoxOffice: </b>{{movieDetails.boxOffice}}
                         <br><b>Production: </b>{{movieDetails.production}}
+                    </div>
+                    <div class="movieRatings">
+                        <br><b>IMBD rating: </b>
+                        <br>{{movieDetails.imdbRating}}
+                        <br><b>Other services' ratings:</b>
+                        <br>{{movieDetails.ratings}}
+
                     </div>
                 </div>
             </div>
