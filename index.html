@@ -71,7 +71,7 @@
                     <div class="movieRatings">
                         <br><b>IMBD rating: </b>
                         <br>{{movieDetails.imdbRating}}
-                        <li v-for="rating in movieDetails.ratings" style="list-style-type:none">
+                        <li class="list-unstyled" v-for="rating in movieDetails.ratings">
                             <b>{{ rating.Source }}:</b>
                             <br>{{ rating.Value }}
                         </li>
