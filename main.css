@@ -33,6 +33,7 @@ table, th, td
     float: left;
     width: 20%;
     padding: 10px;
+    display: flex;
 }
 
 table.center {
@@ -117,14 +118,14 @@ table.center {
 .movieInformation {
     font-size: 18px;
     float: left;
-    width: 50%;
+    width: 65%;
     padding: 10px;
     color: black;
 }
 .movieRatings {
     font-size: 18px;
     float: left;
-    width: 30%;
+    width: 15%;
     padding: 10px;
     color: black;
 }
