@@ -156,7 +156,7 @@
             },
 
             getDetailsOf: async function (movieName) {
-                let omdbapiURL = `http://www.omdbapi.com/?t=${movieName}&apikey=d3b3f9ef`
+                let omdbapiURL = `https://www.omdbapi.com/?t=${movieName}&apikey=d3b3f9ef`
 
                 return axios.get(omdbapiURL).then(response => {
                     this.generalData = new GeneralData(
@@ -194,7 +194,7 @@
             },
 
             loadMovieInfo: function () {
-                let omdbapiURL = `http://www.omdbapi.com/?t=${this.searchText}&apikey=d3b3f9ef`
+                let omdbapiURL = `https://www.omdbapi.com/?t=${this.searchText}&apikey=d3b3f9ef`
 
                 axios.get(omdbapiURL).then(response => {
                     this.generalData = new GeneralData(
